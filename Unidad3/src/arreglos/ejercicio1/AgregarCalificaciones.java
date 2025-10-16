@@ -12,14 +12,58 @@ import arreglos.ejercicio1.datos.KardexDatos;
  */
 public class AgregarCalificaciones extends javax.swing.JDialog {
 
+    // -1 = nuevo registro; >=0 índice de la fila a editar
+    private int filaEditar = -1;
+
     /**
      * Creates new form AgregarCalificaciones
      */
     public AgregarCalificaciones(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        filaEditar = -1;
     }
 
+    /**
+     * Inicializa campos del diálogo para editar un registro existente
+     * @param fila índice dentro de KardexDatos.datos
+     * @param materia
+     * @param semestre
+     * @param calificacion
+     */
+    public void cargarDatosParaEditar(int fila, String materia, String semestre, String calificacion) {
+       String[] columnas = {"Materia", "semestre", "Calificación"};
+        javax.swing.table.DefaultTableModel modelo = new javax.swing.table.DefaultTableModel(columnas, 0);
+        double suma = 0;
+        int contador = 0;
+
+        for (int i = 0; i < KardexDatos.index; i++) {
+         String mate = KardexDatos.datos[i][0];
+         String seme = KardexDatos.datos[i][1];
+         String calif = KardexDatos.datos[i][2];
+
+            modelo.addRow(new Object[]{materia, semestre, calif});
+
+            try {
+                suma += Double.parseDouble(calif);
+                contador++;
+            } catch (NumberFormatException e) {
+                // Si no es número, no se suma
+            }
+        }
+        tablaDatos.setModel(modelo);
+
+        if (contador > 0) {
+            double promedio = suma / contador;
+            jLabel1.setText("Promedio del semestre es: " + String.format("%.2f", promedio));
+        } else {
+            jLabel1.setText("Promedio del semestre es: N/A");
+        }
+
+    }
+
+        
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,6 +74,13 @@ public class AgregarCalificaciones extends javax.swing.JDialog {
     private void initComponents() {
 
         btnGuardar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -40,74 +91,76 @@ public class AgregarCalificaciones extends javax.swing.JDialog {
             }
         });
 
+        jLabel1.setText("Materia");
+
+        jLabel2.setText("Semestre");
+
+        jLabel3.setText("Calificación");
+
+        jButton1.setText("Modificar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(309, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(35, 35, 35)
                 .addComponent(btnGuardar)
-                .addGap(19, 19, 19))
+                .addGap(22, 22, 22))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(263, Short.MAX_VALUE)
-                .addComponent(btnGuardar)
-                .addGap(14, 14, 14))
+                .addGap(42, 42, 42)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(btnGuardar))
+                .addGap(26, 26, 26))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Metodo para guardar elementos
-     * @param evt 
-     */
-    
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        
-      String materia= "pruebaChiquita";  
-      String semestre ="1";
-      String calificaciones ="60";
-      
-      KardexDatos.datos[KardexDatos.index][0]=materia;
-      KardexDatos.datos[KardexDatos.index][1]=semestre;
-      KardexDatos.datos[KardexDatos.index][2]=calificaciones;
-      KardexDatos.index++;
-      this.dispose();
-      
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
-    /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AgregarCalificaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AgregarCalificaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AgregarCalificaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AgregarCalificaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+       java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 AgregarCalificaciones dialog = new AgregarCalificaciones(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -121,7 +174,85 @@ public class AgregarCalificaciones extends javax.swing.JDialog {
         });
     }
 
+    
+        
+    /**
+     * Metodo para guardar elementos
+     * @param evt 
+     */
+    
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        
+      String materia = jTextField1.getText().trim();
+        String semestre = jTextField2.getText().trim();
+        String calificacion = jTextField3.getText().trim();
+
+        if (materia.isEmpty() || semestre.isEmpty() || calificacion.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor llena todos los campos.");
+            return;
+        }
+
+        if (filaEditar == -1) {
+            // NUEVO
+            if (KardexDatos.index >= KardexDatos.datos.length) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Ya se alcanzó el límite de " + KardexDatos.datos.length + " materias.");
+                return;
+            }
+            KardexDatos.datos[KardexDatos.index][0] = materia;
+            KardexDatos.datos[KardexDatos.index][1] = semestre;
+            KardexDatos.datos[KardexDatos.index][2] = calificacion;
+            KardexDatos.index++;
+        } else {
+            // MODIFICAR
+            KardexDatos.datos[filaEditar][0] = materia;
+            KardexDatos.datos[filaEditar][1] = semestre;
+            KardexDatos.datos[filaEditar][2] = calificacion;
+            // no cambiamos KardexDatos.index
+        }
+
+        this.dispose();
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+         String materia = jTextField1.getText();
+    String semestre = jTextField2.getText();
+    String calificacion = jTextField3.getText();
+
+    if (materia.isEmpty() || semestre.isEmpty() || calificacion.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Por favor llena todos los campos.");
+        return;
+    }
+
+    String posStr = javax.swing.JOptionPane.showInputDialog(this, "Número de materia a modificar (1-" + KardexDatos.index + "):");
+    try {
+        int pos = Integer.parseInt(posStr) - 1; // restamos 1 porque el arreglo empieza en 0
+        if (pos >= 0 && pos < KardexDatos.index) {
+            KardexDatos.datos[pos][0] = materia;
+            KardexDatos.datos[pos][1] = semestre;
+            KardexDatos.datos[pos][2] = calificacion;
+            javax.swing.JOptionPane.showMessageDialog(this, "Materia modificada correctamente.");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Número inválido.");
+        }
+    } catch (NumberFormatException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Entrada inválida.");
+    }
+
+    this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }
