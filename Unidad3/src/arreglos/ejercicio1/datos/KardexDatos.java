@@ -1,6 +1,9 @@
 
 package arreglos.ejercicio1.datos;
 
+import arreglos.ejercicio1.Materias;
+import java.util.*;
+
 /**
  *
  * @author Cinthia
@@ -11,6 +14,8 @@ package arreglos.ejercicio1.datos;
 public class KardexDatos {
     
     public static String [][] datos = new String [10][3];
+    
+    public static List<Materias> materias=new ArrayList<>();
     
     public static int index = 0; //Para saber cuantos llevo
     
