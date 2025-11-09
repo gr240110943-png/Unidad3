@@ -5,90 +5,88 @@ package ejercicioPilas;
  * es una pila estatica para manipular datos
  * @author Cinthia
  */
+
+import javax.swing.JOptionPane;
+
 public class MiStack {
     
-    private final int MAXIMO;
-    
-    private final String[] STACK;
-    
-    private int tope;
-    
-    /**
-     * Metodo que me permite ver el contenico de la pila
-     * @return regresa un arreglo con los datos
-     */
-    
-    public String[] viewStack(){
-        
-        int topeVirtual= tope +1 ;
-        String[]values = new String[topeVirtual];
-        int index = 0;
-        for(int i=tope; i>=0; i--){
-            values[index] = STACK[i];
-            index++;
-        }
-       return values; 
+    private String[] pila; // Arreglo que almacena los elementos de la pila
+    int tope;      // Índice del último elemento (tope)
+    private int max;       // Tamaño máximo de la pila
+
+    // Constructor
+    public MiStack(int tam) {
+        max = tam;
+        pila = new String[max];
+        tope = -1; // pila vacía al inicio
     }
-    
-    /**
-     * Metodo que permite mostrar los elementos que tiene la pila en el tope
-     * @return regresa al valor, si no existe regresa vacio
-     */
-    public String peek(){
-        String value="";
-        if(tope>=0){
-            value=STACK[tope];
-        }
-        return value;
-    }
-    
-    
-    /**
-     * Metodo que permite sacar el valor que tenemos en ele tope de la pila
-     * @return regresa el valor que tenemos en el final de la pila
-     * si el valor no existe regresa vacia
-     */
-    
-    public String pop(){
-        
-        String value = "";
-        if(tope>=0){
-         value=STACK[tope];
-         tope--;
-            
-        }
-        return value;
-    }
-    
-    /**
-     * Metodo que permite agregar elementos a la pila
-     * @param value es el elemento que se agrega 
-     * @return un verdadero si se logro insertar
-     */
-    public boolean push (String value){
-        boolean isSuccess;
-        if(tope<MAXIMO){
-            
+
+    // Inserta un nuevo elemento (PUSH)
+    public void push(String dato) {
+        if (estaLlena()) {
+            JOptionPane.showMessageDialog(
+                null,
+                "La pila está llena, no se puede agregar más elementos.",
+                "Pila llena",
+                JOptionPane.WARNING_MESSAGE
+            );
+        } else {
             tope++;
-            STACK[tope]=value;
-            isSuccess=true;  
-        }else{
-            isSuccess = false;
+            pila[tope] = dato;
         }
-        return isSuccess;
     }
-    
-    public MiStack(){
-        
-        this(10);
-        
+
+    // Elimina y devuelve el último elemento (POP)
+    public String pop() {
+        if (estaVacia()) {
+            JOptionPane.showMessageDialog(
+                null,
+                "La pila está vacía, no hay elementos para eliminar.",
+                "Pila vacía",
+                JOptionPane.WARNING_MESSAGE
+            );
+            return null;
+        } else {
+            String dato = pila[tope];
+            pila[tope] = null; // limpiar visualmente
+            tope--;
+            return dato;
+        }
     }
-    
-    public MiStack (int max){
-        
-        MAXIMO=max;
-        STACK=new String[MAXIMO];
-        tope = -1;        
+
+    // Devuelve el elemento en el tope sin eliminarlo (PEEK)
+    public String peek() {
+        if (estaVacia()) {
+            return null;
+        } else {
+            return pila[tope];
+        }
     }
-    
+
+    // Verifica si la pila está vacía
+    public boolean estaVacia() {
+        return tope == -1;
+    }
+
+    // Verifica si la pila está llena
+    public boolean estaLlena() {
+        return tope == max - 1;
+    }
+
+    // Devuelve el tamaño actual (número de elementos)
+    public int tamaño() {
+        return tope + 1;
+    }
+
+    // Muestra el contenido de la pila (para depuración o consola)
+    public void mostrar() {
+        if (estaVacia()) {
+            System.out.println("La pila está vacía.");
+        } else {
+            System.out.println("Contenido de la pila:");
+            for (int i = tope; i >= 0; i--) {
+                System.out.println(pila[i]);
+            }
+        }
+    }
 }
