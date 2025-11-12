@@ -17,7 +17,7 @@ public class SimulacionPila {
             
             System.out.println("Valor que esta en el tope "+miPila.peek());
             
-            System.out.println("Todos los valores" + Arrays.toString(miPila.viewStack()));
+
     }
     
 }
